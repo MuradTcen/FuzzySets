@@ -3,6 +3,7 @@ import xlrd
 import xlwt
 import pylab
 from matplotlib import mlab
+import matplotlib.pyplot as plt
 import numpy as np
 '''
 print
@@ -24,8 +25,12 @@ y = cos(x), 0<x<5
    
 '''
 
-def calcToExcel():
-    #df=read_excel('Нечеткие множества.xlsx')
+def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
+
+    '''
+    some shitty function
+    '''
+    xc=0
     wb=xlwt.Workbook()
     ws=wb.add_sheet('Task')
     ws.write(0,0,'Решение задачи 4')
@@ -45,18 +50,136 @@ def calcToExcel():
             ws.write(1,i,y1[i-2-len(x0)])
         elif i<len(x0)+len(x1)+len(x2):
             ws.write(0,i,x2[i-2-len(x0)-len(x1)])
-            ws.write(1,i,y2[i-2-len(x0)-len(x1)])       
-    pylab.plot(x0,x0)
-    pylab.plot(x1,y1)
-    pylab.plot(x2,y2)
+            ws.write(1,i,y2[i-2-len(x0)-len(x1)])   
+    
+            
+    ws.write(xc+2,0,'Универсум:')
+    ws.write(xc+3,0,'  '.join(map(str, l1)))
+    ws.write(xc+4,0,'  '.join(map(str, l2)))
+    ws.write(xc+5,0,'Носитель:')
+    k=0
+    for i in range(len(l1)):
+        if l2[i]>0:
+            ws.write(xc+6,k,l2[i])
+            k+=1
+    ws.write(xc+7,0,'Точки перехода:')
+    tmp=0
+    for i in range(len(l1)):
+        if l1[i]==0.5:
+            ws.write(xc+8,tmp,l2[i])
+            tmp+=1
+    if tmp==0: ws.write(xc+8,0,'Нет')
+    ws.write(xc+10,0,'Унимодально: ')
+    tmp=0
+    for i in range(len(l1)):
+        if l1[i]==1:
+            tmp+=1
+    if tmp==1: ws.write(xc+11,1,'Да')
+    else: ws.write(xc+11,1,'Нет')
+    tmps='Высота: '+str(max(l1))
+    ws.write(xc+12,0,tmps)
+    if max(l1)==1.0: ws.write(xc+13,0,'Нечеткое множество - нормально')
+    else: ws.write(xc+13,0,'Нечеткое множество - субнормально')
+
+    ws.write(xc+14,0,'Ядро: ')
+    tmp=0
+    k=0
+    for i in range(len(l1)): 
+        if l1[i]==1:
+            ws.write(xc+15,k,l2[i])
+            k+=1     
+            tmp+=1
+    if tmp==0: ws.write(xc+16,0,'Нет')
+    k=0
+    ws.write(xc+17,0,'Граница: ') 
+    for i in range(len(l1)):
+        if l1[i]>0 and l1[i]<1:
+            ws.write(xc+18,k,l2[i])  
+            k+=1
+            
+    ws.write(xc+19,0,'Нормализация: ')  
+    for i in range(len(l1)):
+        l1[i]/=max(l1)
+        l1[i]=round(l1[i],1)
+    ws.write(xc+20,0,'  '.join(map(str, l1)))
+    ws.write(xc+21,0,'  '.join(map(str, l2)))  
+    #________________________________________
+    
+    xc=21
+    ws.write(xc+1,0,'Характеристика нечеткого множества Y')
+    ws.write(xc+2,0,'Универсум:')
+    ws.write(xc+3,0,'  '.join(map(str, l3)))
+    ws.write(xc+4,0,'  '.join(map(str, l4)))
+    ws.write(xc+5,0,'Носитель:')
+    k=0
+    for i in range(len(l4)):
+        if l4[i]>0:
+            ws.write(xc+6,k,l4[i])
+            k+=1
+    ws.write(xc+7,0,'Точки перехода:')
+    tmp=0
+    for i in range(len(l3)):
+        if l3[i]==0.5:
+            ws.write(xc+8,tmp,l4[i])
+            tmp+=1
+    if tmp==0: ws.write(xc+8,0,'Нет')
+    ws.write(xc+10,0,'Унимодально: ')
+    tmp=0
+    for i in range(len(l3)):
+        if l3[i]==1:
+            tmp+=1
+    if tmp==1: ws.write(xc+11,1,'Да')
+    else: ws.write(xc+11,1,'Нет')
+    tmps='Высота: '+str(max(l3))
+    ws.write(xc+12,0,tmps)
+    if max(l3)==1.0: ws.write(xc+13,0,'Нечеткое множество - нормально')
+    else: ws.write(xc+13,0,'Нечеткое множество - субнормально')
+
+    ws.write(xc+14,0,'Ядро: ')
+    tmp=0
+    k=0
+    for i in range(len(l3)): 
+        if l3[i]==1:
+            ws.write(xc+15,k,l4[i])
+            k+=1     
+            tmp+=1
+    if tmp==0: ws.write(xc+16,0,'Нет')
+    k=0
+    ws.write(xc+17,0,'Граница: ') 
+    for i in range(len(l3)):
+        if l3[i]>0 and l3[i]<1:
+            ws.write(xc+18,k,l4[i])  
+            k+=1
+            
+    ws.write(xc+19,0,'Нормализация: ')  
+    for i in range(len(l3)):
+        l3[i]/=max(l3)
+        l3[i]=round(l3[i],1)
+    ws.write(xc+20,0,'  '.join(map(str, l3)))
+    ws.write(xc+21,0,'  '.join(map(str, l4)))     
+        
+    pylab.title(title)
+    
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)    
+    line_1=pylab.plot(x0,x0,'bD:')
+    line_2=pylab.plot(x1,y1)
+    line_3=pylab.plot(x2,y2)
+    legend=pylab.legend((ll1,ll2,ll3),loc='upper center')
+    #frame = legend.get_frame()
+    #frame.set_facecolor('0.90')
+    #pylab.grid()
     pylab.show()    
     wb.save('solution.xlsx')
+    
   
-  
-def ploting(l0):
+def ploting(l0,title,xlabel,ylabel):
     #formatedYVector=['%.2f' % elem for elem in ylist ]
     x=np.arange(l0[0],l0[1],l0[2])
     y=l0[3]*x*x-l0[4]*x+l0[5]
+    pylab.title(title)
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)
     pylab.plot(x,y)
     pylab.show()
 
@@ -130,7 +253,7 @@ def parsing(listParse):
         i+=1
     return listParse
 
-'''----------------------------------------------'''
+
 
 
 
