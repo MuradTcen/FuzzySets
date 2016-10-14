@@ -7,7 +7,12 @@ import numpy as np
 import fuzzy_sets
 
 
-rb=xlrd.open_workbook('Нечеткие множества.xlsx')
+titleFS='$Graph of Fuzzy Set$'
+x_label_F_S='$X$'
+y_label_F_S='$\mu(X)$'
+
+
+rb=xlrd.open_workbook('FuzzySets.xlsx')
 sheet = rb.sheet_by_index(2)
 listData0=listData1=listData2=listData3=[]      
 #filling lists
@@ -25,6 +30,11 @@ print (listData0)
 print (listData1)
 print (listData2)
 print (listData3)
+fuzzy_sets.calcToExcel(titleFS,x_label_F_S,x_label_F_S,listData0,listData1,listData2,
+                        listData3,'','','')
+#fuzzy_sets.printSet(listData1,listData0,x_label_F_S,y_label_F_S,titleFS)
+
+#fuzzy_sets.printSet(listData3,listData2,x_label_F_S,y_label_F_S,titleFS)
 '''
 fuzzy_sets.printPropertyFuzzySet(listData1,listData2)
 fuzzy_sets.printPropertyFuzzySet(listData3,listData4)

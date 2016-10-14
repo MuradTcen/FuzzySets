@@ -24,6 +24,17 @@ y = cos(x), 0<x<5
     x принадлежит [-5;10]
    
 '''
+def printSet(l1,l2,xlabel,ylabel,title):
+    x=l1
+    y=l2
+    pylab.title(title)
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)
+    pylab.plot(x,y)
+    pylab.show()
+    
+    
+    
 
 def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
 
@@ -102,10 +113,28 @@ def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
         l1[i]/=max(l1)
         l1[i]=round(l1[i],1)
     ws.write(xc+20,0,'  '.join(map(str, l1)))
-    ws.write(xc+21,0,'  '.join(map(str, l2)))  
+    ws.write(xc+21,0,'  '.join(map(str, l2))) 
+    ws.write(xc+22,0,'Разложение нечеткого множества по множествам уровня: ')
+    tmpl=l1
+    tmpl1=l2
+    tmpc=0
+    while tmpl:
+        ws.write(xc+tmpc+23,0,min(tmpl))
+        k=0
+        group=min(tmpl)
+        i=0
+        while i<len(tmpl) and group==min(tmpl):    
+            if tmpl[i]==group:
+                ws.write(xc+tmpc+23,k+1,tmpl1[i])
+                print (group,tmpl1[i])
+                del tmpl[i]
+                del tmpl1[i]
+                k+=1
+            i+=1
+        tmpc+=1
     #________________________________________
     
-    xc=21
+    xc=30
     ws.write(xc+1,0,'Характеристика нечеткого множества Y')
     ws.write(xc+2,0,'Универсум:')
     ws.write(xc+3,0,'  '.join(map(str, l3)))
