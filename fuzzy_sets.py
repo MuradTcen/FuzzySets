@@ -2,6 +2,7 @@
 import xlrd
 import xlwt
 import pylab
+import math
 from matplotlib import mlab
 import matplotlib.pyplot as plt
 import numpy as np
@@ -177,10 +178,47 @@ def diff_sets(x,y):
 #----------------------5 /\
 
 #----------------------8 \/
+def linear_hem_ind(x):
+    tmp=[]
+    dist=0
+    quad_dist=0
+    for i in range(len(x)):
+        if x[i]>=0.5: tmp.append(1)
+        else: tmp.append(0)
+        dist+=abs(x[i]-tmp[i])
+        quad_dist+=(x[i]-tmp[i])**2
+    rel_dist_hem=dist/len(x)
+    quad_dist=quad_dist**0.5
+    rel_quad_dist=quad_dist/(len(x)**0.5)
+    return 2*rel_dist_hem   
 #----------------------8 /\
 
+
 #----------------------9 \/
-#----------------------9 /\   
+def euclid_ind(x):
+    tmp=[]
+    dist=0
+    quad_dist=0
+    for i in range(len(x)):
+        if x[i]>=0.5: tmp.append(1)
+        else: tmp.append(0)
+        dist+=abs(x[i]-tmp[i])
+        quad_dist+=(x[i]-tmp[i])**2
+    rel_dist_hem=dist/len(x)
+    quad_dist=quad_dist**0.5
+    rel_quad_dist=quad_dist/(len(x)**0.5)
+    return 2*rel_quad_dist
+#----------------------9 /\
+
+  
+#----------------------10 \/  
+def comp_ind(a,b):
+    if a>b: print('%f more than %f' % (a,b))
+    elif a==b: print('%f equel %f' % (a,b))
+    else: print('%f less than %f' % (a,b))    
+    
+    
+#----------------------10 /\ 
 def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
     '''
     some shitty function

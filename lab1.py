@@ -1,16 +1,19 @@
 #!bin/python3
 import pylab
-import math
 from matplotlib import mlab
 import numpy as np
 import fuzzy_sets
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
-
-
+'''
+1 2 3 4 5 6 7 8 9 10
+- - - - - - - - - ++
+'''
 testx=[0.1,0.6,0.9,1,0.5,0.8,0.4,0.5]
 testy=[0.7,0.5,1,0.6,0.4,0.3,0,0.2]
+tstx=[0.3,0.5,0.7,0.9,1.0]
+tsty=[0.3,0.5,0.8,0.8]
 titleFS='$Graph of Fuzzy Set$'
 titlex0='$X$'
 titlex1='$CON(X)$'
@@ -22,7 +25,6 @@ x_label_F_S='$X$'
 y_label_F_S='$\mu(X)$'
 y_x_label_F_S='$Y$'
 y_y_label_F_S='$\mu(Y)$'
-
 df=pd.read_excel('FuzzySets.xlsx',sheetname='Sheet3')  
 
 l0=df['µa(x1n)']
@@ -58,8 +60,7 @@ cons_dis_invYX_drasticXY=fuzzy_sets.con_dis_inv_drastic(l0,l2)
 #dis's total..
 mul_distotal_total=fuzzy_sets.mul_dstotal_total(l0,l2)
 #---------------------4
-print (testx)
-print (testy)
+
 #---------------------5
 con_x=fuzzy_sets.con_set(l0)
 con_y=fuzzy_sets.con_set(l2)
@@ -69,11 +70,48 @@ alg_adj_x=fuzzy_sets.inv_set(l0)
 alg_adj_y=fuzzy_sets.inv_set(l2)
 dis_total=fuzzy_sets.disjuctive_total(l0,l2)
 #---------------------5
-
+'''
 #---------------------6
 fuzzy_sets.print_3_sets(l0,l1,con_x,l1,dil_x,l1,x_label_F_S,y_label_F_S,titlex0,titlex1,titlex2)
 fuzzy_sets.print_3_sets(l2,l3,con_y,l3,dil_y,l3,y_x_label_F_S,y_y_label_F_S,titley0,titley1,titley2)
 #---------------------6
+'''
+#---------------------8
+hem_x=fuzzy_sets.linear_hem_ind(l0)
+hem_con_x=fuzzy_sets.linear_hem_ind(con_x)
+hem_dil_x=fuzzy_sets.linear_hem_ind(dil_x)
+hem_y=fuzzy_sets.linear_hem_ind(l2)
+hem_con_y=fuzzy_sets.linear_hem_ind(con_y)
+hem_dil_y=fuzzy_sets.linear_hem_ind(dil_y)
+#---------------------8
+#---------------------9
+euc_x=fuzzy_sets.euclid_ind(l0)
+euc_con_x=fuzzy_sets.euclid_ind(con_x)
+euc_dil_x=fuzzy_sets.euclid_ind(dil_x)
+euc_y=fuzzy_sets.euclid_ind(l2)
+euc_con_y=fuzzy_sets.euclid_ind(con_y)
+euc_dil_y=fuzzy_sets.euclid_ind(dil_y)
+#---------------------9
+
+'''
+#---------------------10
+fuzzy_sets.comp_ind(hem_x,hem_dil_x)
+fuzzy_sets.comp_ind(hem_x,hem_con_x)
+fuzzy_sets.comp_ind(hem_con_x,hem_dil_x)
+
+fuzzy_sets.comp_ind(euc_x,euc_dil_x)
+fuzzy_sets.comp_ind(euc_x,euc_con_x)
+fuzzy_sets.comp_ind(euc_con_x,euc_dil_x)
+
+fuzzy_sets.comp_ind(hem_y,hem_dil_y)
+fuzzy_sets.comp_ind(hem_y,hem_con_y)
+fuzzy_sets.comp_ind(hem_con_y,hem_dil_y)
+
+fuzzy_sets.comp_ind(euc_y,euc_dil_y)
+fuzzy_sets.comp_ind(euc_y,euc_con_y)
+fuzzy_sets.comp_ind(euc_con_y,euc_dil_y)
+#---------------------10
+'''
 #fuzzy_sets.calcToExcel#(titleFS,x_label_F_S,x_label_F_S,l0,l1,l2,l3,'','','')
 
 #fuzzy_sets.calcToExcel(titleFS,x_label_F_S,x_label_F_S,listData0,listData1,listData2,
