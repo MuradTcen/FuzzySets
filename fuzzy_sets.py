@@ -5,6 +5,9 @@ import pylab
 from matplotlib import mlab
 import matplotlib.pyplot as plt
 import numpy as np
+from decimal import Decimal 
+from decimal import getcontext
+getcontext().prec=2
 '''
 print
 Универсум, Носитель, Точки перехода, унимодальность функции принадлежности,
@@ -24,7 +27,9 @@ y = cos(x), 0<x<5
     x принадлежит [-5;10]
    
 '''
-def printSet(l1,l2,xlabel,ylabel,title):
+
+
+def printSet(l2,l1,xlabel,ylabel,title):
     x=l1
     y=l2
     pylab.title(title)
@@ -34,10 +39,149 @@ def printSet(l1,l2,xlabel,ylabel,title):
     pylab.show()
     
     
+def print_3_sets(x0,y0,x1,y1,x2,y2,xlabel,ylabel,title0,title1,title2):
+    pylab.subplot(3,1,1)
+    pylab.title(title0)
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)
+    pylab.grid()
+    pylab.plot(y0,x0)
+    
+    pylab.subplot(3,1,2)
+    pylab.title(title1)
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)
+    pylab.grid()
+    pylab.plot(y1,x1)
+    
+    pylab.subplot(3,1,3)
+    pylab.title(title2)
+    pylab.xlabel(xlabel)
+    pylab.ylabel(ylabel)
+    pylab.plot(y2,x2)
+    pylab.grid()
+    
+    pylab.show()
+'''       
+def print_excel(title,xlabel,ylabel,l1,l2,ll1,ll2,ll3):
+    writer = ExcelWriter('output.xlsx')
+    df1.to_excel(writer,'Sheet1')
+    df2.to_excel(writer,'Sheet2')
+    writer.save()
+    tmp=list('  '.join(map(str, l1)))
+    df=pd.DataFrame()
+    
+'''
+def decomp_by_level(l1,l2):
+    while l1:
+        min_group=min(l1)
+        i=0
+        while i<len(l1) and min_group==min(l1):    
+            if l1[i]==min_group:
+
+                print (min_group,l2[i])
+                del l1[i]
+                del l2[i]
+            else: i+=1       
+#----------------------4\/
+    
+    
+def disjunction_sets(x,y):
+    res=[]
+    for i in range(len(x)):
+        res.append(max(x[i],y[i]))      
+    return res
+    
+   
+def conjunction_sets(x,y):
+    res=[]
+    for i in range(len(x)):
+        res.append(min(x[i],y[i]))      
+    return res
+        
+        
+def inv_set(x):
+    res=[]
+    for i in range(len(x)):
+        res.append(1-x[i])        
+    return res
+
+
+def drastic_intersection(x,y):
+    res=[]
+    for i in range(len(x)):
+        if x[i]==1: res.append(y[i])
+        elif y[i]==1: res.append(x[i])
+        else: res.append(0)
+    return res
+    
+def drastic_join(x,y):
+    res=[]
+    for i in range(len(x)):
+        if x[i]==0: res.append(y[i])
+        elif y[i]==0: res.append(x[i])
+        else: res.append(1)
+    return res
+    
+    
+def mul_sets(x,y):
+    res=[]
+    for i in range(len(x)):
+        res.append(x[i]*y[i])
+    return res
     
 
-def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
+def total_sets(x,y):
+    res=[]
+    for i in range(len(x)):
+        res.append(x[i]+y[i]-x[i]*y[i])
+    return res
+        
 
+def disjuctive_total(x,y):
+    return disjunction_sets((conjunction_sets(x,(inv_set(y)))),(conjunction_sets(inv_set(x),y))) 
+
+
+def inv_conjunction_sets(x,y):
+    return inv_set(conjunction_sets(x,y))
+    
+    
+def con_dis_inv_drastic(x,y):
+    return conjunction_sets(disjunction_sets(x,inv_set(y)),drastic_join(x,y))
+
+
+def mul_dstotal_total(x,y):
+    return mul_sets(disjuctive_total(x,y),total_sets(x,y)) 
+#----------------------4 /\   
+
+#----------------------5 \/
+def con_set(x):
+    res=[]
+    for i in range(len(x)):
+        res.append(x[i]**2)
+    return res
+    
+    
+def dil_set(x):
+    res=[]
+    for i in range(len(x)):
+        res.append(x[i]**0.5)
+    return res
+    
+
+def diff_sets(x,y):
+    res=[]
+    for i in range(len(x)):
+        res.append(max(x[i]-y[i],0))
+    return res    
+#----------------------5 /\
+
+#----------------------8 \/
+#----------------------8 /\
+
+#----------------------9 \/
+#----------------------9 /\   
+def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
     '''
     some shitty function
     '''
@@ -259,17 +403,14 @@ def printPropertyFuzzySet(l1,l2):
         if l1[i]>0 and l1[i]<1: print (l2[i],' ',end='')  
 
 '''
-
-'''
 def is_number(str):
     try:
         float(str)
         return True
     except ValueError:
         return False
-'''
 
-'''
+
 def parsing(listParse):
     i=0
     while i<len(listParse):
@@ -281,7 +422,7 @@ def parsing(listParse):
             i-=1           
         i+=1
     return listParse
-
+'''
 
 
 
