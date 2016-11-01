@@ -1,33 +1,31 @@
 #!bin/python3
 import xlrd
 import xlwt
+import pandas as pd
 import pylab
 import math
 from matplotlib import mlab
 import matplotlib.pyplot as plt
 import numpy as np
-from decimal import Decimal 
-from decimal import getcontext
-getcontext().prec=2
+
+
 '''
-print
-Универсум, Носитель, Точки перехода, унимодальность функции принадлежности,
-нормально или субнормальное нечеткого множества, высота, ядро, границы
-нечеткого множества
 links:
 http://www.bogotobogo.com/python/python_numpy_array_tutorial_basic_A.php
 http://www.programcreek.com/python/example/504/numpy.array
 http://cs231n.github.io/python-numpy-tutorial/#matplotlib
 koldunov.net
 '''
-'''
-Создать пользоват ф, резалтом кот явл массив значений, заносящийся в ячейки рабочего листа. Выполнить графическое отображение результата работы функции.
-    x, x<=0
-y = cos(x), 0<x<5
-    sqrt(x**3), x>=5
-    x принадлежит [-5;10]
-   
-'''
+
+
+def list_to_exc(lst0):
+    t='title'
+    exc_f='pandas.xlsx'
+    #df=pd.DataFrame({'data':[1,3,4,5]})
+    df=pd.DataFrame({'data':[x for x in lst0]})
+    writer=pd.ExcelWriter(exc_f)
+    df.to_excel(writer,sheet_name='Sheet1')
+    writer.save()
 
 
 def printSet(l2,l1,xlabel,ylabel,title):
@@ -63,27 +61,25 @@ def print_3_sets(x0,y0,x1,y1,x2,y2,xlabel,ylabel,title0,title1,title2):
     pylab.grid()
     
     pylab.show()
-'''       
-def print_excel(title,xlabel,ylabel,l1,l2,ll1,ll2,ll3):
-    writer = ExcelWriter('output.xlsx')
-    df1.to_excel(writer,'Sheet1')
-    df2.to_excel(writer,'Sheet2')
-    writer.save()
-    tmp=list('  '.join(map(str, l1)))
-    df=pd.DataFrame()
-    
-'''
+
+         
 def decomp_by_level(l1,l2):
-    while l1:
+    res=[]
+    tmp=[]
+    tmp1=[]
+    while len(l1)>1:
         min_group=min(l1)
         i=0
         while i<len(l1) and min_group==min(l1):    
             if l1[i]==min_group:
-
-                print (min_group,l2[i])
+                tmp.append(min_group)
+                tmp1.append(l2[i])
                 del l1[i]
                 del l2[i]
-            else: i+=1       
+            else: i+=1 
+    res.append(tmp) 
+    res.append(tmp1) 
+    return res   
 #----------------------4\/
     
     
@@ -219,156 +215,87 @@ def comp_ind(a,b):
     
     
 #----------------------10 /\ 
-def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
-    '''
-    some shitty function
-    '''
-    xc=0
-    wb=xlwt.Workbook()
-    ws=wb.add_sheet('Task')
-    ws.write(0,0,'Решение задачи 4')
-    x0=np.linspace(-5,0,50)
-    x1=np.linspace(0.01,4.99,50)
-    x2=np.linspace(5,10,50)
-    y1=np.cos(x1)
-    y2=(x2**3)**0.5
-    ws.write(0,1,'X')
-    ws.write(1,1,'Y')
-    for i in range(2,len(x0)+len(x1)+len(x2)):
-        if i<len(x0): 
-            ws.write(0,i,x0[i-2])
-            ws.write(1,i,x0[i-2])
-        elif i<len(x0)+len(x1):
-            ws.write(0,i,x1[i-2-len(x0)])
-            ws.write(1,i,y1[i-2-len(x0)])
-        elif i<len(x0)+len(x1)+len(x2):
-            ws.write(0,i,x2[i-2-len(x0)-len(x1)])
-            ws.write(1,i,y2[i-2-len(x0)-len(x1)])   
-    
-            
-    ws.write(xc+2,0,'Универсум:')
-    ws.write(xc+3,0,'  '.join(map(str, l1)))
-    ws.write(xc+4,0,'  '.join(map(str, l2)))
-    ws.write(xc+5,0,'Носитель:')
-    k=0
-    for i in range(len(l1)):
-        if l2[i]>0:
-            ws.write(xc+6,k,l2[i])
-            k+=1
-    ws.write(xc+7,0,'Точки перехода:')
-    tmp=0
-    for i in range(len(l1)):
-        if l1[i]==0.5:
-            ws.write(xc+8,tmp,l2[i])
-            tmp+=1
-    if tmp==0: ws.write(xc+8,0,'Нет')
-    ws.write(xc+10,0,'Унимодально: ')
-    tmp=0
-    for i in range(len(l1)):
-        if l1[i]==1:
-            tmp+=1
-    if tmp==1: ws.write(xc+11,1,'Да')
-    else: ws.write(xc+11,1,'Нет')
-    tmps='Высота: '+str(max(l1))
-    ws.write(xc+12,0,tmps)
-    if max(l1)==1.0: ws.write(xc+13,0,'Нечеткое множество - нормально')
-    else: ws.write(xc+13,0,'Нечеткое множество - субнормально')
 
-    ws.write(xc+14,0,'Ядро: ')
-    tmp=0
-    k=0
-    for i in range(len(l1)): 
-        if l1[i]==1:
-            ws.write(xc+15,k,l2[i])
-            k+=1     
-            tmp+=1
-    if tmp==0: ws.write(xc+16,0,'Нет')
-    k=0
-    ws.write(xc+17,0,'Граница: ') 
-    for i in range(len(l1)):
-        if l1[i]>0 and l1[i]<1:
-            ws.write(xc+18,k,l2[i])  
-            k+=1
-            
-    ws.write(xc+19,0,'Нормализация: ')  
-    for i in range(len(l1)):
-        l1[i]/=max(l1)
-        l1[i]=round(l1[i],1)
-    ws.write(xc+20,0,'  '.join(map(str, l1)))
-    ws.write(xc+21,0,'  '.join(map(str, l2))) 
-    ws.write(xc+22,0,'Разложение нечеткого множества по множествам уровня: ')
-    tmpl=l1
-    tmpl1=l2
-    tmpc=0
-    while tmpl:
-        ws.write(xc+tmpc+23,0,min(tmpl))
-        k=0
-        group=min(tmpl)
-        i=0
-        while i<len(tmpl) and group==min(tmpl):    
-            if tmpl[i]==group:
-                ws.write(xc+tmpc+23,k+1,tmpl1[i])
-                print (group,tmpl1[i])
-                del tmpl[i]
-                del tmpl1[i]
-                k+=1
-            i+=1
-        tmpc+=1
-    #________________________________________
-    
-    xc=30
-    ws.write(xc+1,0,'Характеристика нечеткого множества Y')
-    ws.write(xc+2,0,'Универсум:')
-    ws.write(xc+3,0,'  '.join(map(str, l3)))
-    ws.write(xc+4,0,'  '.join(map(str, l4)))
-    ws.write(xc+5,0,'Носитель:')
-    k=0
-    for i in range(len(l4)):
-        if l4[i]>0:
-            ws.write(xc+6,k,l4[i])
-            k+=1
-    ws.write(xc+7,0,'Точки перехода:')
-    tmp=0
-    for i in range(len(l3)):
-        if l3[i]==0.5:
-            ws.write(xc+8,tmp,l4[i])
-            tmp+=1
-    if tmp==0: ws.write(xc+8,0,'Нет')
-    ws.write(xc+10,0,'Унимодально: ')
-    tmp=0
-    for i in range(len(l3)):
-        if l3[i]==1:
-            tmp+=1
-    if tmp==1: ws.write(xc+11,1,'Да')
-    else: ws.write(xc+11,1,'Нет')
-    tmps='Высота: '+str(max(l3))
-    ws.write(xc+12,0,tmps)
-    if max(l3)==1.0: ws.write(xc+13,0,'Нечеткое множество - нормально')
-    else: ws.write(xc+13,0,'Нечеткое множество - субнормально')
+#----------------------PROPERTIES \/
+NO='Нет'
+YES='Да'
 
-    ws.write(xc+14,0,'Ядро: ')
+def half_dots(x,y):
+    res=''
     tmp=0
-    k=0
-    for i in range(len(l3)): 
-        if l3[i]==1:
-            ws.write(xc+15,k,l4[i])
-            k+=1     
+    for i in range(len(x)):
+        if x[i]==0.5:
+            res+=str(y[i])+' '
             tmp+=1
-    if tmp==0: ws.write(xc+16,0,'Нет')
-    k=0
-    ws.write(xc+17,0,'Граница: ') 
-    for i in range(len(l3)):
-        if l3[i]>0 and l3[i]<1:
-            ws.write(xc+18,k,l4[i])  
-            k+=1
-            
-    ws.write(xc+19,0,'Нормализация: ')  
-    for i in range(len(l3)):
-        l3[i]/=max(l3)
-        l3[i]=round(l3[i],1)
-    ws.write(xc+20,0,'  '.join(map(str, l3)))
-    ws.write(xc+21,0,'  '.join(map(str, l4)))     
-        
+    if tmp==0: return NO
+    return res
+    
+
+def is_unimodal(x):
+    tmp=0
+    for i in range(len(x)):
+        if x[i]==1:
+            tmp+=1
+    if tmp==1: return YES
+    else: return NO
+    
+
+hight_set=(lambda x: max(x)) 
+
+
+def str_uni(y):
+    res=''
+    for i in range(len(y)):
+        res=res+str(y[i])+' '
+    return res
+    
+
+def is_normal(x):
+    if max(x)==1.0: return 'нормально'
+    else: return 'субнормально'
+    
+def core_of_set(x,y): 
+    res=''   
+    is_absent=True
+    for i in range(len(x)): 
+        if x[i]==1:
+            res+=str(y[i])
+            res+=' '     
+            is_absent=True
+    if is_absent: return NO
+    return res
+    
+
+def edge_of_set(x,y): 
+    res=''
+    is_abcent=True
+    for i in range(len(x)):
+        if x[i]>0 and x[i]<1:
+            res+=str(x[i])  
+            res+=' '
+            is_abcent=False
+    if is_abcent: return NO
+    return res
+    
+    
+def set_to_str(x,y):
+    res=''
+    for i in range(len(x)):
+        res=res+str(x[i])+'/'+str(y[i])+' '
+    return res
+    
+    
+def normal_set(x,y):
+    res=''  
+    for i in range(len(x)):
+        res=res+str(round(x[i]/max(x),2))+'/'+str(y[i])+' '
+    return res 
+#ленина 74f 218 
+
+ 
+#----------------------PROPERTIES /\ 
+
+'''        
     pylab.title(title)
     
     pylab.xlabel(xlabel)
@@ -382,7 +309,7 @@ def calcToExcel(title,xlabel,ylabel,l1,l2,l3,l4,ll1,ll2,ll3):
     #pylab.grid()
     pylab.show()    
     wb.save('solution.xlsx')
-    
+'''    
   
 def ploting(l0,title,xlabel,ylabel):
     #formatedYVector=['%.2f' % elem for elem in ylist ]
